@@ -43,5 +43,15 @@ namespace SistemaGestionTransporteApi.Controllers
             var mensaje = await Task.Run(() => new ViajeDAO().deleteViaje(id));
             return Ok(mensaje);
         }
+        [HttpGet("getViajesPorDestino/{idDestino}")]
+        public async Task<ActionResult<List<Viaje>>> getViajesPorDestino(int idDestino)
+        {
+            // Llamada a la capa DAO para obtener los viajes filtrados por destino
+            var lista = await Task.Run(() => new ViajeDAO().getViajesPorDestino(idDestino));
+
+            // Retorna la lista de viajes filtrados por destino
+            return Ok(lista);
+        }
+
     }
 }

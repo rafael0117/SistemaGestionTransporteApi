@@ -136,5 +136,39 @@ namespace SistemaGestionTransporteApi.Repositorio.DAO
             }
             return mensaje;
         }
+        public IEnumerable<Viaje> getViajesPorDestino(int idDestino)
+        {
+            List<Viaje> lista = new List<Viaje>();
+
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_viajes_por_destino", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@idDestino", idDestino);
+
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    lista.Add(new Viaje
+                    {
+                        IdViaje = dr.GetInt32(0),
+                        IdBus = dr.GetInt32(1),
+                        IdDestino = dr.GetInt32(2),
+                        NombreDestino = dr.GetString(3), // Aquí asumo que estás devolviendo el nombre del destino en la consulta
+                        Imagen = dr.GetString(4), // Aquí asumo que estás devolviendo la imagen del destino
+                        fechaSalida = dr.GetDateTime(5),
+                        fechaLlegada = dr.GetDateTime(6),
+                        incidencias = dr.IsDBNull(7) ? null : dr.GetString(7),
+                        precio = dr.GetDouble(8)
+                    });
+                }
+                dr.Close();
+            }
+
+            return lista;
+        }
+
     }
 }

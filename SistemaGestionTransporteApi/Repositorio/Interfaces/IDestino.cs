@@ -6,8 +6,10 @@ namespace SistemaGestionTransporteApi.Repositorio.Interfaces
     {
         IEnumerable<Destino> getDestinos();
         Destino getDestino(int id);
-        string insertDestino(Destino destino);
-        string updateDestino(Destino destino);
-        string deleteDestino(int id);
+        Task<string> insertDestino(Destino destino, IFormFile imagen);
+        Task<string> updateDestino(Destino destino, IFormFile imagen);
+
+		string deleteDestino(int id);
+        Task<string> SubirStorage(Stream archivo, string nombre);
     }
 }
