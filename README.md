@@ -376,6 +376,26 @@ BEGIN
 END
 GO
 ----------------------------------------------
+CREATE PROCEDURE sp_viajes_por_destino
+    @idDestino INT
+AS
+BEGIN
+    SELECT 
+        v.id_viaje,
+        v.id_bus,
+        v.id_destino,
+        d.nombre_des,
+        d.imagen,
+        v.fech_sal,
+        v.fech_lle,
+        v.incidencias,
+        v.precio
+    FROM viaje v
+    INNER JOIN destino d ON v.id_destino = d.id_destino
+    WHERE v.id_destino = @idDestino;
+END
+GO
+----------------------------------------------
 CREATE PROCEDURE usp_actualizar_viaje
     @id_viaje INT,
     @id_bus INT,
