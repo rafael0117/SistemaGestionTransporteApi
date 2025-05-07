@@ -51,44 +51,33 @@ namespace SistemaGestionTransporteApi.Controllers
             return Ok(mensaje);
         }
 
-
-        [HttpPut("updateDestino")]
-        public async Task<ActionResult<string>> UpdateDestino([FromForm] Destino reg, [FromForm] IFormFile imagen)
+        [HttpPut("updateDestino/{id}")]
+        public async Task<ActionResult<string>> UpdateDestino(int id,[FromForm] string nombre,[FromForm] IFormFile imagen)
         {
-            // Validar si la imagen es nula
             if (imagen != null)
             {
-                // Obtener la extensión del archivo
                 string extension = Path.GetExtension(imagen.FileName).ToLowerInvariant();
-
-                // Definir extensiones permitidas
                 string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
 
-                // Validar que la extensión sea una de las permitidas
                 if (!allowedExtensions.Contains(extension))
-                {
-                    return BadRequest("El archivo debe ser una imagen (.jpg, .jpeg, .png, .gif)");
-                }
+                    return BadRequest("El archivo debe ser una imagen válida");
 
-                // Validar el tamaño de la imagen (máximo 5MB)
                 if (imagen.Length > 5 * 1024 * 1024)
-                {
                     return BadRequest("La imagen no puede exceder 5MB");
-                }
             }
 
-            // Aquí se puede procesar la actualización del destino
-            var mensaje = await new DestinoDAO().updateDestino(reg, imagen);
+            var destino = new Destino
+            {
+                IdDestino = id,
+                nombre = nombre
+            };
 
-            // Retornar el mensaje de éxito o error
+            var mensaje = await new DestinoDAO().updateDestino(destino, imagen);
+
             if (!string.IsNullOrEmpty(mensaje))
-            {
-                return Ok(mensaje);  // Si todo está bien, retornamos un OK con el mensaje.
-            }
+                return Ok(mensaje);
             else
-            {
                 return BadRequest("Ocurrió un error al actualizar el destino.");
-            }
         }
 
 
