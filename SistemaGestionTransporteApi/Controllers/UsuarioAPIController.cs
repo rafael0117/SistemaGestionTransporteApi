@@ -33,16 +33,33 @@ namespace SistemaGestionTransporteApi.Controllers
             var mensaje = await Task.Run(() => new UsuarioDAO().insertUsuarioCliente(reg));
             return Ok(mensaje);
         }
-
         [HttpPost("login")]
-        public async Task<ActionResult<Usuario>> login(Usuario credenciales)
+        public async Task<ActionResult<object>> login(Usuario credenciales)
         {
             var usuario = await Task.Run(() => new UsuarioDAO().login(credenciales));
+
             if (usuario == null)
             {
-                return Unauthorized("Credenciales inválidas.");
+                return Unauthorized(new { mensaje = "Credenciales inválidas." });
             }
-            return Ok(usuario);
+
+            return Ok(new
+            {
+                mensaje = "Bienvenido",
+                usuario = new
+                {
+                    usuario.IdUsuario,
+                    usuario.Nombres,
+                    usuario.Apellidos,
+                    usuario.Username,
+                    usuario.Correo,
+                    usuario.Direccion,
+                    usuario.IdRol
+                }
+            });
         }
+
+
+
     }
 }

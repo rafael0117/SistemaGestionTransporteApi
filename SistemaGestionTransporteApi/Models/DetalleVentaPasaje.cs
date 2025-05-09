@@ -2,11 +2,11 @@
 {
 	public class DetalleVentaPasaje
 	{
-		public int id_detalle { get; set; }
-		public int cantidad { get; set; }
-		public float precio { get; set; }
-		public float total { get; set; }
-		public int id_venta { get; set; }
-		public int id_viaje { get; set; }
-	}
+        public int IdDetalle { get; set; }
+        public int IdVenta { get; set; }
+        public int IdViaje { get; set; }
+        public int Cantidad { get; set; }
+        public decimal Precio { get; set; }
+        public decimal Total { get; set; }
+    }
 }

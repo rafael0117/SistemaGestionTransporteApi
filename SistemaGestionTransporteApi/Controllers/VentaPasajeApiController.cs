@@ -9,52 +9,36 @@ namespace SistemaGestionTransporteApi.Controllers
 	[ApiController]
 	public class VentaPasajeAPIController : ControllerBase
 	{
-		[HttpGet("getVentaPasajes")]
-		public async Task<ActionResult<List<VentaPasaje>>> getVentaPasajes()
-		{
-			var lista = await Task.Run(() => new VentaPasajeDAO().getVentaPasajes());
-			return Ok(lista);
-		}
+        [HttpPost("registrar")]
+        public async Task<ActionResult<int>> RegistrarVenta([FromBody] VentaPasaje venta)
+        {
+            try
+            {
+                var idVenta = await Task.Run(() => new VentaPasajeDAO().RegistrarVenta(venta));
+                return Ok(idVenta);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al registrar venta: {ex.Message}");
+            }
+        }
+        [HttpGet("obtenerporid/{id}")]
+        public async Task<ActionResult<VentaPasaje>> ObtenerVentaPorId(int id)
+        {
+            try
+            {
+                var venta = await Task.Run(() => new VentaPasajeDAO().ObtenerVentaPorId(id));
 
-		[HttpGet("getVentaPasaje/{id}")]
-		public async Task<ActionResult<VentaPasaje>> getVentaPasaje(int id)
-		{
-			var venta = await Task.Run(() => new VentaPasajeDAO().getVentaPasaje(id));
-			return Ok(venta);
-		}
+                if (venta == null)
+                    return NotFound("Venta no encontrada.");
 
-		[HttpPost("insertVentaPasaje")]
-		public async Task<ActionResult<string>> insertVentaPasaje(VentaPasaje reg)
-		{
-			var mensaje = await Task.Run(() => new VentaPasajeDAO().insertVentaPasaje(reg));
-			return Ok(mensaje);
-		}
+                return Ok(venta);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener venta: {ex.Message}");
+            }
+        }
 
-
-		// ================================================
-		// Métodos para DETALLE de venta
-		// ================================================
-
-		[HttpGet("getDetalleVentaPasajes")]
-		public async Task<ActionResult<List<DetalleVentaPasaje>>> getDetalleVentaPasajes()
-		{
-			var lista = await Task.Run(() => new DetalleVentaPasajeDAO().getDetalleVentaPasajes());
-			return Ok(lista);
-		}
-
-		[HttpGet("getDetalleVentaPasaje/{id}")]
-		public async Task<ActionResult<DetalleVentaPasaje>> getDetalleVentaPasaje(int id)
-		{
-			var detalle = await Task.Run(() => new DetalleVentaPasajeDAO().getDetalleVentaPasajesByVenta(id));
-			return Ok(detalle);
-		}
-
-		[HttpPost("insertDetalleVentaPasaje")]
-		public async Task<ActionResult<string>> insertDetalleVentaPasaje(DetalleVentaPasaje reg)
-		{
-			var mensaje = await Task.Run(() => new DetalleVentaPasajeDAO().insertDetalleVentaPasaje(reg));
-			return Ok(mensaje);
-		}
-
-	}
+    }
 }

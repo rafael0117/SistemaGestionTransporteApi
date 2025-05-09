@@ -2,11 +2,12 @@
 {
 	public class VentaPasaje
 	{
-		public int id_venta { get; set; }
-		public string estado { get; set; }
-		public DateTime fecha_venta { get; set; }
-		public float total { get; set; }
-		public long id_usuario { get; set; }
-		public string numero { get; set; }
-	}
+        public int IdVenta { get; set; }
+        public string Estado { get; set; }
+        public DateTime FechaVenta { get; set; }
+        public decimal Total { get; set; }    // CAMBIADO de float a decimal
+        public long IdUsuario { get; set; }
+        public string Numero { get; set; }
+        public List<DetalleVentaPasaje> Detalles { get; set; } = new List<DetalleVentaPasaje>();
+    }
 }
