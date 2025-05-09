@@ -260,31 +260,41 @@ use bdtransporte
 go
 
 ------------------------------------------------------------------------------------
-CREATE PROCEDURE usp_insertar_venta_pasaje
+CREATE PROCEDURE sp_insertar_venta_pasaje
+    @estado VARCHAR(50),
     @fecha_venta DATETIME2,
     @total FLOAT,
     @id_usuario BIGINT,
     @numero VARCHAR(255),
-    @estado VARCHAR(50) = 'pendiente'
+    @id_venta INT OUTPUT
 AS
 BEGIN
-    INSERT INTO venta_pasaje (fecha_venta, total, id_usuario, numero, estado)
-    VALUES (@fecha_venta, @total, @id_usuario, @numero, @estado);
-END
-GO
+    SET NOCOUNT ON;
+
+    -- Insertar en la tabla venta_pasaje
+    INSERT INTO venta_pasaje (estado, fecha_venta, total, id_usuario, numero)
+    VALUES (@estado, @fecha_venta, @total, @id_usuario, @numero);
+
+    -- Obtener el ID de la venta recién insertada
+    SET @id_venta = SCOPE_IDENTITY();  -- Devuelve el último ID insertado en la conexión actual
+END;
+
 ------------------------------------------------------------------------------------
-CREATE PROCEDURE usp_insertar_detalle_venta_pasaje
+CREATE PROCEDURE sp_insertar_detalle_venta_pasaje
+    @id_venta INT,
+    @id_viaje INT,
     @cantidad INT,
     @precio FLOAT,
-    @total FLOAT,
-    @id_venta INT,
-    @id_viaje INT
+    @total FLOAT
 AS
 BEGIN
-    INSERT INTO detalle_venta_pasaje (cantidad, precio, total, id_venta, id_viaje)
-    VALUES (@cantidad, @precio, @total, @id_venta, @id_viaje);
-END
-GO
+    SET NOCOUNT ON;
+
+    -- Insertar en la tabla detalle_venta_pasaje
+    INSERT INTO detalle_venta_pasaje (id_venta, id_viaje, cantidad, precio, total)
+    VALUES (@id_venta, @id_viaje, @cantidad, @precio, @total);
+END;
+
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 CREATE PROCEDURE usp_insertar_bus
