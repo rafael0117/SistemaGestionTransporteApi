@@ -296,6 +296,32 @@ BEGIN
 END;
 
 ------------------------------------------------------------------------------------
+
+CREATE PROCEDURE sp_obtener_venta_pasaje_por_id
+    @id_venta INT
+AS
+BEGIN
+    SELECT 
+        v.id_venta,
+        v.estado,
+        v.fecha_venta,
+        v.total,
+        v.id_usuario,
+        v.numero
+    FROM venta_pasaje v
+    WHERE v.id_venta = @id_venta;
+
+    SELECT 
+        d.id_detalle,
+        d.id_venta,
+        d.id_viaje,
+        d.cantidad,
+        d.precio,
+        d.total
+    FROM detalle_venta_pasaje d
+    WHERE d.id_venta = @id_venta;
+END;
+
 ------------------------------------------------------------------------------------
 CREATE PROCEDURE usp_insertar_bus
     @modelo VARCHAR(50),
